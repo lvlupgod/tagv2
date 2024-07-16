@@ -4,8 +4,9 @@ import random
 
 pygame.init()
 modes = pygame.display.list_modes()
-WIDTH, HEIGHT = modes[0]
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode()
+pygame.display.toggle_fullscreen()
+WIDTH, HEIGHT = screen.get_size()
 clock = pygame.time.Clock()
 # player2_pos =
 font = pygame.font.Font('freesansbold.ttf', 40)
@@ -45,6 +46,7 @@ while skibidi:
     power4_x = random.randint(1, WIDTH - 1)
     power4_y = random.randint(1, HEIGHT - 1)
     variable = True
+    variable2 = False
     dt = 0
     a = True
     b = True
@@ -65,6 +67,7 @@ while skibidi:
     while running:
         catcher_text = font.render('The catcher is : ' + color, True, color, 'purple')
         timetext = font.render(str(timea), True, 'green', 'purple')
+        erase_text = font.render('The catcher is : ' + color, True, 'purple', 'purple')
         # poll for events
         # pygame.QUIT event means the user clicked X to close your window
         for event in pygame.event.get():
@@ -76,12 +79,12 @@ while skibidi:
 
         # fill the screen with a color to wipe away anything from last frame
         screen.fill("purple")
-        screen.blit(catcher_text, (1000, 0))
-        screen.blit(text1score, (0, 0))
-        screen.blit(timetext, (820, 0))
-        screen.blit(text2score, (1450, 0))
-        pygame.draw.circle(screen, "red", player_pos, 40)
-        pygame.draw.circle(screen, 'blue', player2_pos, 40)
+        screen.blit(catcher_text, (300, 0))
+        screen.blit(text1score, (20, 0))
+        screen.blit(timetext, (790 , 0))
+        screen.blit(text2score, (1200, 0))
+        pygame.draw.circle(screen, "red", player_pos, 30)
+        pygame.draw.circle(screen, 'blue', player2_pos, 30)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
             player_pos.y -= speed1
@@ -131,14 +134,16 @@ while skibidi:
             if turn % 2 == 1:
                 points_o += 1
                 timea = 30
-                screen.blit(p2wintext, (0, 0))
+                screen.blit(erase_text, (300, 0))
+                screen.blit(p2wintext, (20, 0))
                 pygame.display.flip()
                 time.sleep(0.7)
                 running = False
             else:
                 points_x += 1
                 timea = 30
-                screen.blit(p1wintext, (0, 0))
+                screen.blit(erase_text, (300, 0))
+                screen.blit(p1wintext, (20, 0))
                 pygame.display.flip()
                 time.sleep(0.7)
                 running = False
@@ -147,12 +152,13 @@ while skibidi:
         else :
             color = 'blue'
         if turn % 2 == 1 and variable == True:
-            speed1 += 0.7
+            print('ass')
+            speed1 += 1
             variable = False
-        if turn % 2 == 0 and variable2 == True:
+        if turn % 2 == 0 and variable == True:
             print('stoobid')
-            speed2 += 0.7
-            variable2 = False
+            speed2 += 1
+            variable = False
         if timea <= 20 and po == True:
             screen.blit(power_teleport, (power_x, power_y))
         if p1upHitbox < power_y and p1leftHitbox < power_x and p1downHitbox > power_y and p1rightHitbox > power_x and po == True:
@@ -201,9 +207,7 @@ while skibidi:
             timea += 7
             chamaeleon = False
         if p1upHitbox < p2downHitbox and p1leftHitbox < p2rightHitbox and p1downHitbox > p2upHitbox and p1rightHitbox > p2leftHitbox and freeze_time_start == False:
-            speed1 = 7
-            speed2 = 7
-            # variable = True
+            variable = True
             turn += 1
             no_catch_time = timea
             freeze_time_start = True
